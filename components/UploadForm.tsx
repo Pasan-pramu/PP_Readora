@@ -27,7 +27,7 @@ const UploadForm = () => {
         defaultValues: {
             title: '',
             author: '',
-            voice: DEFAULT_VOICE,
+            persona: DEFAULT_VOICE,
         },
     });
 
@@ -51,7 +51,7 @@ const UploadForm = () => {
                         {/* 1. PDF File Upload */}
                         <FileUploader
                             control={form.control}
-                            name="bookFile"
+                            name="pdfFile"
                             label="Book PDF File"
                             acceptTypes={ACCEPTED_PDF_TYPES}
                             icon={Upload}
@@ -115,7 +115,7 @@ const UploadForm = () => {
                         {/* 5. Voice Selector */}
                         <FormField
                             control={form.control}
-                            name="voice"
+                            name="persona"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel className="form-label">Choose Assistant Voice</FormLabel>
