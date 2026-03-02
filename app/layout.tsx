@@ -1,49 +1,45 @@
 import type { Metadata } from "next";
-import {Geist, Geist_Mono, Mona_Sans} from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/Navbar";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { IBM_Plex_Serif, Mona_Sans} from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
 
-const ibmPlexSans = Geist({
-  variable: "--font-ibm-plex-sans",
-  subsets: ["latin"],
-    weight:["400", "500", "600", "700"],
-    display: "swap"
+import Navbar from "@/components/Navbar";
+import "./globals.css";
+import {Toaster} from "@/components/ui/sonner";
+
+const ibmPlexSerif = IBM_Plex_Serif({
+    variable: "--font-ibm-plex-serif",
+    subsets: ['latin'],
+    weight: ['400', '500', '600', '700'],
+    display: 'swap'
 });
 
 const monaSans = Mona_Sans({
-    variable: "--font-mona-sans",
-    subsets: ["latin"],
-    display: "swap"
+    variable: '--font-mona-sans',
+    subsets: ['latin'],
+    display: 'swap'
 })
 
 export const metadata: Metadata = {
-  title: "Readora",
-  description: "Transition your books into interactive AI Conversations.upload PDFs,and chat with your books using voice.",
+    title: "Readora",
+    description: "Transform your books into interactive AI conversations. Upload PDFs, and chat with your books using voice.",
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
+                                       children,
+                                   }: Readonly<{
+    children: React.ReactNode;
 }>) {
-  return (
-    <ClerkProvider>
-      <html lang="en">
-        <body
-          className={`${ibmPlexSans.variable} ${monaSans.variable} relative font-sans antialiased`}
-        >
-          <Navbar />
-          {children}
-        </body>
-      </html>
-    </ClerkProvider>
-  );
+    return (
+        <ClerkProvider>
+            <html lang="en">
+            <body
+                className={`${ibmPlexSerif.variable} ${monaSans.variable} relative font-sans antialiased`}
+            >
+            <Navbar />
+            {children}
+            <Toaster />
+            </body>
+            </html>
+        </ClerkProvider>
+    );
 }
