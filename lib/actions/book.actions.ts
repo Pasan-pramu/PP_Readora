@@ -17,9 +17,9 @@ export const getAllBooks = async () => {
             data: serializeData(books)
         }
     } catch (e) {
-        console.error('Error connecting to database', e);
+        console.error('Error fetching books:', e);
         return {
-            success: false, error: e
+            success: false, error: e instanceof Error ? e.message : String(e)
         }
     }
 }
@@ -43,9 +43,9 @@ export const checkBookExists = async (title: string) => {
             exists: false,
         }
     } catch (e) {
-        console.error('Error checking book exists', e);
+        console.error('Error checking book exists:', e);
         return {
-            exists: false, error: e
+            exists: false, error: e instanceof Error ? e.message : String(e)
         }
     }
 }
@@ -75,11 +75,15 @@ export const createBook = async (data: CreateBook) => {
             data: serializeData(book),
         }
     } catch (e) {
-        console.error('Error creating a book', e);
+        // Log the full error server-side so we can see the real cause
+        console.error('Error creating a book:', e);
 
+        // FIX: Error objects are NOT serializable in Next.js server actions.
+        // Returning raw `error: e` silently breaks serialization.
+        // Return a plain string instead.
         return {
             success: false,
-            error: e,
+            error: e instanceof Error ? e.message : String(e),
         }
     }
 }
@@ -105,14 +109,14 @@ export const saveBookSegments  = async (bookId: string, clerkId: string, segment
             data: { segmentsCreated: segments.length}
         }
     } catch (e) {
-        console.error('Error saving book segments', e);
+        console.error('Error saving book segments:', e);
 
         await BookSegment.deleteMany({ bookId });
         await Book.findByIdAndDelete(bookId);
         console.log('Deleted book segments and book due to failure to save segments.');
         return {
             success: false,
-            error: e,
+            error: e instanceof Error ? e.message : String(e),
         }
     }
 }
