@@ -462,6 +462,12 @@
         @apply text-sm font-medium text-[#212a3b];
         font-family: 'IBM Plex Serif', serif;
     }
+    .vapi-time-warning {
+        @apply bg-red-50 border border-red-300 animate-pulse;
+    }
+    .vapi-time-warning .vapi-status-text {
+        @apply text-red-600 font-bold;
+    }
     .vapi-stat-box {
         @apply bg-white rounded-[10px] px-2.5 py-5 min-w-[225px] text-center;
     }
@@ -731,6 +737,11 @@
             transform: translateY(-2px);
         }
     }
+
+    /* ===========================================
+       PRICING FEATURE CARDS
+       (Features are now injected into Clerk cards via CSS ::after — see below)
+       =========================================== */
 }
 
 /* Clerk Auth Button Overrides */
@@ -953,3 +964,50 @@ button[data-variant='unstyled'] *,
     border-radius: 0.75rem;
     font-size: 1.125rem;
 }
+
+/* ===========================================
+   PLAN FEATURE LISTS (injected into Clerk cards)
+   =========================================== */
+
+/* Shared feature list styling for all cards */
+.cl-pricingTableCard .cl-pricingTableCardContent::before {
+    display: block;
+    margin-top: 1rem;
+    padding: 0.875rem 1rem;
+    background-color: var(--bg-primary) !important;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.85;
+    color: #212a3b;
+    white-space: pre-line;
+    text-align: left;
+}
+
+/* Free plan (1st card) */
+.cl-pricingTableCard:nth-child(1) .cl-pricingTableCardContent::before {
+    content:
+        '✓  1 book\A'
+        '✓  5 sessions / month\A'
+        '✓  5 min per session\A'
+        '✗  No session history';
+}
+
+/* Standard plan (2nd card) */
+.cl-pricingTableCard:nth-child(2) .cl-pricingTableCardContent::before {
+    content:
+        '✓  10 books\A'
+        '✓  100 sessions / month\A'
+        '✓  15 min per session\A'
+        '✓  Full session history';
+}
+
+/* Pro plan (3rd card) */
+.cl-pricingTableCard:nth-child(3) .cl-pricingTableCardContent::before {
+    content:
+        '✓  100 books\A'
+        '✓  Unlimited sessions\A'
+        '✓  60 min per session\A'
+        '✓  Full session history';
+}
+

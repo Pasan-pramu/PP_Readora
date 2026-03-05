@@ -10,6 +10,7 @@ import { ASSISTANT_ID, DEFAULT_VOICE, VOICE_SETTINGS } from '@/lib/constants';
 import { getVoice } from '@/lib/utils';
 import { IBook, Messages } from '@/types';
 import { startVoiceSession, endVoiceSession } from '@/lib/actions/session.actions';
+import { useSubscription } from '@/hooks/useSubscription';
 
 export function useLatestRef<T>(value: T) {
     const ref = useRef(value);
@@ -39,7 +40,7 @@ export type CallStatus = 'idle' | 'connecting' | 'starting' | 'listening' | 'thi
 
 export function useVapi(book: IBook) {
     const { userId } = useAuth();
-    // const { limits } = useSubscription();
+    const { limits } = useSubscription();
 
     const [status, setStatus] = useState<CallStatus>('idle');
     const [messages, setMessages] = useState<Messages[]>([]);
@@ -54,7 +55,7 @@ export function useVapi(book: IBook) {
     const isStoppingRef = useRef(false);
 
     // Keep refs in sync with latest values for use in callbacks
-    // const maxDurationRef = useLatestRef(limits.maxSessionMinutes * 60);
+    const maxDurationRef = useLatestRef(limits.maxSessionMinutes * 60);
     const durationRef = useLatestRef(duration);
     const voice = book.persona || DEFAULT_VOICE;
 
@@ -79,14 +80,14 @@ export function useVapi(book: IBook) {
                         setDuration(newDuration);
 
                         // Check duration limit
-                        // if (newDuration >= maxDurationRef.current) {
-                        //     getVapi().stop();
-                        //     setLimitError(
-                        //         `Session time limit (${Math.floor(
-                        //             maxDurationRef.current / SECONDS_PER_MINUTE,
-                        //         )} minutes) reached. Upgrade your plan for longer sessions.`,
-                        //     );
-                        // }
+                        if (newDuration >= maxDurationRef.current) {
+                            getVapi().stop();
+                            setLimitError(
+                                `Session time limit (${Math.floor(
+                                    maxDurationRef.current / 60,
+                                )} minutes) reached. Upgrade your plan for longer sessions.`,
+                            );
+                        }
                     }
                 }, TIMER_INTERVAL_MS);
             },
@@ -294,10 +295,9 @@ export function useVapi(book: IBook) {
         status === 'speaking';
 
     // Calculate remaining time
-    // const maxDurationSeconds = limits.maxSessionMinutes * SECONDS_PER_MINUTE;
-    // const remainingSeconds = Math.max(0, maxDurationSeconds - duration);
-    // const showTimeWarning =
-    //     isActive && remainingSeconds <= TIME_WARNING_THRESHOLD && remainingSeconds > 0;
+    const maxDurationSeconds = limits.maxSessionMinutes * 60;
+    const remainingSeconds = Math.max(0, maxDurationSeconds - duration);
+    const showTimeWarning = isActive && remainingSeconds <= 60 && remainingSeconds > 0;
 
     return {
         status,
@@ -310,9 +310,9 @@ export function useVapi(book: IBook) {
         stop,
         limitError,
         clearError,
-        // maxDurationSeconds,
-        // remainingSeconds,
-        // showTimeWarning,
+        maxDurationSeconds,
+        remainingSeconds,
+        showTimeWarning,
     };
 }
 
