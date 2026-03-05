@@ -78,8 +78,13 @@ export const createBook = async (data: CreateBook) => {
         }
 
         // Check subscription limits before creating a book
+        const { userId } = await auth();
+        if (!userId) {
+            return { success: false, error: 'Unauthorized' };
+        }
+
         const { plan, limits } = await getUserPlanWithLimits();
-        const currentBookCount = await Book.countDocuments({ clerkId: data.clerkId });
+        const currentBookCount = await Book.countDocuments({ clerkId: userId });
 
         if (currentBookCount >= limits.maxBooks) {
             return {
@@ -88,7 +93,8 @@ export const createBook = async (data: CreateBook) => {
             };
         }
 
-        const book = await Book.create({...data, slug, totalSegments: 0});
+        // Use server-side userId, not caller-supplied data.clerkId
+        const book = await Book.create({ ...data, clerkId: userId, slug, totalSegments: 0 });
 
         return {
             success: true,
