@@ -116,7 +116,7 @@ export interface FileUploadFieldProps<T extends FieldValues> {
     placeholder: string;
     hint: string;
 }
-export type PlanType = 'free' | 'pro' | 'enterprise';
+export type PlanType = 'free' | 'standard' | 'pro';
 
 export interface SessionCheckResult {
     allowed: boolean;
