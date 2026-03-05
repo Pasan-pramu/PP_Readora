@@ -11,7 +11,7 @@ const BookPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
     if (!userId) redirect("/");
 
     const { slug } = await params;
-    const result = await getBookBySlug(slug);
+    const result = await getBookBySlug(slug, userId);
 
     if (!result.success || !result.data) redirect("/");
 
