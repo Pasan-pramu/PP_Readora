@@ -34,7 +34,7 @@
 
 ## <a name="introduction">✨ Introduction</a>
 
-Bookified is an AI-powered platform that lets you have real-time voice conversations with your books. Built with Next.js 16, Vapi, and MongoDB, it transforms PDFs into interactive entities using natural voice synthesis. Choose from custom ElevenLabs personas to chat with your library, request summaries, and view live transcripts—all wrapped in a sleek Shadcn UI with Clerk authentication. 
+Readora is an AI-powered platform that lets you have real-time voice conversations with your books. Built with Next.js 16, Vapi, and MongoDB, it transforms PDFs into interactive entities using natural voice synthesis. Choose from custom ElevenLabs personas to chat with your library, request summaries, and view live transcripts—all wrapped in a sleek Shadcn UI with Clerk authentication. 
 
 
 ## <a name="tech-stack">⚙️ Tech Stack</a>
